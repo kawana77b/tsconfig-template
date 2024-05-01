@@ -4,15 +4,15 @@
 
 A tool to output tsconfig templates on the command line.
 
-# About
+## About
 
 This tool selects from `tsconfig.json` hosted in [tsconfig/bases](https://github.com/tsconfig/bases) and outputs to a local working directory.
 
-# Install
+## Install
 
 Binaries are available on the [Release page](https://github.com/kawana77b/tsconfig-template/releases).
 
-# Usage
+## Usage
 
 ```bash
 # Select a template and create tsconfig.json in the current work directory
@@ -21,14 +21,14 @@ tsconfig-template
 tsconfig-template list
 ```
 
-# Note
+## Note
 
 The correct use of the original repository is to install the target files from npm and specify them as `extends` in the local `tsconfig.json`.
 **In other words, note that this is a sub-optimal approach.**
 However, sometimes it is quicker to output the files locally without installing them, such as when you want to quickly launch a project in Typescript.
 This tool was created because we wanted to embed the original repository file data into a binary so that we could use it right out of the box as a tool.
 
-# Credits
+## Credits
 
 The following are the repositories used as references.
 Other licensing matters are placed in the `CREDITS` file.
