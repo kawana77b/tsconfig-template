@@ -94,7 +94,9 @@ func runRoot(cmd *cobra.Command, args []string) error {
 	}
 
 	savePath := filepath.Join(rootP.saveDir, "tsconfig.json")
-	os.WriteFile(savePath, bytes, 0644)
+	if err := os.WriteFile(savePath, bytes, 0644); err != nil {
+		return fmt.Errorf("failed to write tsconfig: %w", err)
+	}
 
 	fmt.Printf("%s %s\n", aurora.Cyan("created:"), savePath)
 
