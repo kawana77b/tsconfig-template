@@ -3,9 +3,11 @@
 {
   "name": "Go",
   // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "mcr.microsoft.com/devcontainers/go:1-1.22-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/go:2-1.27-bookworm",
   "features": {
-    "ghcr.io/guiyomh/features/goreleaser:0": {}
+    "ghcr.io/guiyomh/features/goreleaser:0": {
+      "version": "2.19.0"
+    }
   }
 
   // Features to add to the dev container. More info: https://containers.dev/features.
