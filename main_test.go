@@ -5,9 +5,46 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime/debug"
 	"strings"
 	"testing"
 )
+
+func TestResolveVersion(t *testing.T) {
+	tests := []struct {
+		name          string
+		linkerVersion string
+		info          *debug.BuildInfo
+		want          string
+	}{
+		{"release", "1.2.3", &debug.BuildInfo{Main: debug.Module{Version: "v1.0.0"}}, "1.2.3"},
+		{"snapshot", "1.2.4-SNAPSHOT", nil, "1.2.4-SNAPSHOT"},
+		{"go install", "", &debug.BuildInfo{Main: debug.Module{Version: "v1.2.3"}}, "v1.2.3"},
+		{"prerelease", "", &debug.BuildInfo{Main: debug.Module{Version: "v1.2.3-rc.1"}}, "v1.2.3-rc.1"},
+		{"local build", "", &debug.BuildInfo{Main: debug.Module{Version: "(devel)"}}, "dev"},
+		{"empty build info", "", &debug.BuildInfo{}, "dev"},
+		{"missing build info", "", nil, "dev"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := resolveVersion(tt.linkerVersion, tt.info); got != tt.want {
+				t.Fatalf("resolveVersion() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestVersionOutput(t *testing.T) {
+	info, _ := debug.ReadBuildInfo()
+	want := "tsconfig-template version " + resolveVersion(version, info) + "\n"
+	output, err := cliCommand(t, t.TempDir(), "--version").CombinedOutput()
+	if err != nil {
+		t.Fatalf("CLI failed: %v\n%s", err, output)
+	}
+	if string(output) != want {
+		t.Fatalf("--version = %q, want %q", output, want)
+	}
+}
 
 // Run the real CLI in a subprocess so its exit status can be checked.
 func TestCLIProcess(t *testing.T) {

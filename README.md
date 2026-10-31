@@ -33,6 +33,17 @@ goreleaser release --snapshot --clean --skip=publish
 tsconfig-template
 # Check available tsconfig types
 tsconfig-template list
+# Show the installed version
+tsconfig-template --version
+```
+
+Release binaries report the version embedded by GoReleaser. Builds installed with
+`go install github.com/kawana77b/tsconfig-template@vX.Y.Z` report the module version.
+Local builds use Go's module version when available, otherwise `dev`. To explicitly
+embed a Git tag in a local build:
+
+```bash
+go build -ldflags "-X main.version=$(git describe --tags --exact-match)"
 ```
 
 ## Note
