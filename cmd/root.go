@@ -2,10 +2,12 @@ package cmd
 
 import (
 	"embed"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 
+	"github.com/AlecAivazis/survey/v2/terminal"
 	basesrepo "github.com/kawana77b/tsconfig-template/internal/bases_repo"
 	"github.com/kawana77b/tsconfig-template/internal/prompt"
 	"github.com/logrusorgru/aurora/v4"
@@ -78,8 +80,10 @@ func runRoot(cmd *cobra.Command, args []string) error {
 	if choice == "" {
 		ans, err := prompt.NewSelectQuestion().Ask("Select a template", names)
 		if err != nil {
-			// If the user cancels, return nil because you want to finish without displaying any error.
-			return nil
+			if errors.Is(err, terminal.InterruptErr) {
+				return nil
+			}
+			return err
 		}
 		choice = ans
 	}

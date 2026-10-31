@@ -67,3 +67,18 @@ func TestDefaultTemplateWriteFailure(t *testing.T) {
 		t.Fatalf("CLI reported successful creation after write failure:\n%s", output)
 	}
 }
+
+func TestPromptFailure(t *testing.T) {
+	dir := t.TempDir()
+	// A subprocess without stdin cannot read from an interactive terminal.
+	output, err := cliCommand(t, dir).CombinedOutput()
+	if err == nil {
+		t.Fatalf("CLI succeeded despite prompt failure:\n%s", output)
+	}
+	if !strings.Contains(string(output), "failed to ask question") {
+		t.Fatalf("missing prompt error:\n%s", output)
+	}
+	if _, err := os.Stat(filepath.Join(dir, "tsconfig.json")); !os.IsNotExist(err) {
+		t.Fatalf("expected no output file after prompt failure, got: %v", err)
+	}
+}
