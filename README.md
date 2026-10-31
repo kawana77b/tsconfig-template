@@ -12,6 +12,20 @@ This tool selects from `tsconfig.json` hosted in [tsconfig/bases](https://github
 
 Binaries are available on the [Release page](https://github.com/kawana77b/tsconfig-template/releases).
 
+## Development
+
+Use Go 1.27.3 or later and GoReleaser 2.19.0. CI reads the Go version from `go.mod`.
+
+```bash
+git submodule update --init --recursive
+go test ./...
+go vet ./...
+go build
+goreleaser check
+# Build release archives locally without publishing
+goreleaser release --snapshot --clean --skip=publish
+```
+
 ## Usage
 
 ```bash
